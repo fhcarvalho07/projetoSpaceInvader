@@ -18,7 +18,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'Application'
+    mainClass.set('Application')
 }
 
 test {
