@@ -4,17 +4,19 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
 public class Arena {
-
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
+    private SpaceShip spaceShip;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
+        this.spaceShip = new SpaceShip(10, 10);
     }
 
     public void draw(TextGraphics graphics) {
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#0f172a"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
+        spaceShip.draw(graphics);
     }
 }

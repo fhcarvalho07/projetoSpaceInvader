@@ -1,4 +1,3 @@
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.*;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.terminal.*;
@@ -52,7 +51,6 @@ public class Game {
             this.screen.doResizeIfNecessary();
 
             this.arena = new Arena(size_arena.getColumns(), size_arena.getRows());
-
         } catch (IOException | FontFormatException | URISyntaxException e) {
             e.printStackTrace();
         }
