@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
+    private Arena arena;
 
     public Game() {
         try {
@@ -15,11 +16,14 @@ public class Game {
                     .setInitialTerminalSize(terminalSize);
 
             Terminal terminal = terminalFactory.createTerminal();
+            TerminalSize size_arena = terminal.getTerminalSize();
 
             this.screen = new TerminalScreen(terminal);
             this.screen.setCursorPosition(null);
             this.screen.startScreen();
             this.screen.doResizeIfNecessary();
+
+            this.arena = new Arena(size_arena.getColumns(), size_arena.getRows());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,6 +31,7 @@ public class Game {
 
     private void draw() throws IOException {
         screen.clear();
+        arena.draw(screen.newTextGraphics());
         screen.refresh();
     }
 
