@@ -23,18 +23,25 @@ public class Game {
 
     public Game() {
         try {
-
-            URL resource = getClass().getClassLoader().getResource("spaceInvaders.ttf");
-            File fontFile = new File(resource.toURI());
-            Font font =  Font.createFont(Font.TRUETYPE_FONT, fontFile);
-
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(font);
+
+            // Fonte Space Invaders
+            URL spaceFont = getClass().getClassLoader().getResource("spaceInvaders.ttf");
+            File fileSpace = new File(spaceFont.toURI());
+            Font fontSpace =  Font.createFont(Font.TRUETYPE_FONT, fileSpace).deriveFont(Font.PLAIN, 25);
+            ge.registerFont(fontSpace);
+
+            // Fonte Texto
+            URL textFont = getClass().getClassLoader().getResource("pressStart2P.ttf");
+            File fileText = new File(textFont.toURI());
+            Font fontText =  Font.createFont(Font.TRUETYPE_FONT, fileText).deriveFont(Font.PLAIN, 25);
+            ge.registerFont(fontText);
+
+
+            AWTTerminalFontConfiguration fontConfig = AWTTerminalFontConfiguration.newInstance(fontSpace, fontText);
 
             DefaultTerminalFactory factory = new DefaultTerminalFactory();
 
-            Font loadedFont = font.deriveFont(Font.PLAIN, 25);
-            AWTTerminalFontConfiguration fontConfig = AWTTerminalFontConfiguration.newInstance(loadedFont);
             factory.setTerminalEmulatorFontConfiguration(fontConfig);
             factory.setForceAWTOverSwing(true);
             factory.setInitialTerminalSize(new TerminalSize(120, 40));
