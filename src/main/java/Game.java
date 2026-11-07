@@ -4,6 +4,7 @@ import com.googlecode.lanterna.terminal.*;
 import com.googlecode.lanterna.terminal.swing.AWTTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.AWTTerminalFrame;
 
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -33,7 +34,7 @@ public class Game {
             AWTTerminalFontConfiguration fontConfig = AWTTerminalFontConfiguration.newInstance(loadedFont);
             factory.setTerminalEmulatorFontConfiguration(fontConfig);
             factory.setForceAWTOverSwing(true);
-            factory.setInitialTerminalSize(new TerminalSize(30, 20));
+            factory.setInitialTerminalSize(new TerminalSize(120, 30));
 
             Terminal terminal = factory.createTerminal();
             ((AWTTerminalFrame)terminal).addWindowListener(new WindowAdapter() {
@@ -64,8 +65,12 @@ public class Game {
 
     public void run() {
         try {
-            draw();
-        } catch (IOException e) {
+            while (true) {
+                draw();
+
+                Thread.sleep(30);
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
