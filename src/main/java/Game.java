@@ -76,6 +76,8 @@ public class Game {
                         arena.setSpaceShipDirection(1);
                     } else if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 'q') {
                         running = false;
+                    } else if (stroke.getKeyType() == KeyType.EOF) {
+                        running = false;
                     }
                 }
 
