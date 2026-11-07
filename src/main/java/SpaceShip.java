@@ -2,32 +2,46 @@ import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
 public class SpaceShip {
-    private int x;
-    private int y;
+    private Position position;
+    private int d = 0;
+    private int speedCounter = 0;
+    private int movementDelay = 3;
 
     public SpaceShip(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.position = new Position(x, y);
     }
 
-    public int getX() {
-        return x;
+    public void setDirection(int d) {
+        this.d = d;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
+    public void move(int max_width) {
+        if (d == 0) {
+            return; // se a direcão for 0 não mexe
+        }
 
-    public int getY() {
-        return y;
-    }
+        speedCounter++;
+        if (speedCounter < movementDelay) {
+            return; // Só anda de 3 em 3 frames para ser mais lenta
+        }
+        speedCounter = 0;
 
-    public void setY(int y) {
-        this.y = y;
+        int newX = position.getX() + d;
+
+
+        if (newX < 0) {
+            newX = 0;
+            d = 0;
+        } else if (newX >= max_width) {
+            newX = max_width - 1;
+            d = 0;
+        }
+
+        position.setX(newX);
     }
 
     public void draw(TextGraphics graphics) {
-        graphics.setCharacter(getX(), getY(), TextCharacter.fromCharacter('-')[0]);
+        graphics.setCharacter(position.getX(), position.getY(), TextCharacter.fromCharacter('-')[0]);
     }
 
 }
