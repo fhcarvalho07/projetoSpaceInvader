@@ -12,9 +12,19 @@ public class Arena {
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        this.spaceShip = new SpaceShip(10, 10);
+        this.spaceShip = new SpaceShip(10, 30);
     }
 
+    //Spaceship
+    public void moveSpaceShip() {
+        spaceShip.move(width);
+    }
+
+    public void setSpaceShipDirection(int d) {
+        spaceShip.setDirection(d);
+    }
+
+    //draw
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');

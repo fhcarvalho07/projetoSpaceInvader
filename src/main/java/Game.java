@@ -3,6 +3,8 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.terminal.*;
 import com.googlecode.lanterna.terminal.swing.AWTTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.AWTTerminalFrame;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 
 
 import java.awt.*;
@@ -15,6 +17,7 @@ import java.net.URL;
 
 
 public class Game {
+    private boolean running = true;
     private Screen screen;
     private Arena arena;
 
@@ -34,7 +37,7 @@ public class Game {
             AWTTerminalFontConfiguration fontConfig = AWTTerminalFontConfiguration.newInstance(loadedFont);
             factory.setTerminalEmulatorFontConfiguration(fontConfig);
             factory.setForceAWTOverSwing(true);
-            factory.setInitialTerminalSize(new TerminalSize(120, 30));
+            factory.setInitialTerminalSize(new TerminalSize(120, 40));
 
             Terminal terminal = factory.createTerminal();
             ((AWTTerminalFrame)terminal).addWindowListener(new WindowAdapter() {
@@ -44,13 +47,12 @@ public class Game {
                 }
             });
 
-            TerminalSize size_arena = terminal.getTerminalSize();
-
             this.screen = new TerminalScreen(terminal);
             this.screen.setCursorPosition(null);
             this.screen.startScreen();
             this.screen.doResizeIfNecessary();
 
+            TerminalSize size_arena = terminal.getTerminalSize();
             this.arena = new Arena(size_arena.getColumns(), size_arena.getRows());
         } catch (IOException | FontFormatException | URISyntaxException e) {
             e.printStackTrace();
@@ -65,11 +67,26 @@ public class Game {
 
     public void run() {
         try {
-            while (true) {
+            while (running) {
+                KeyStroke stroke = screen.pollInput();
+                if (stroke != null) {
+                    if (stroke.getKeyType() == KeyType.ArrowLeft) {
+                        arena.setSpaceShipDirection(-1);
+                    } else if (stroke.getKeyType() == KeyType.ArrowRight) {
+                        arena.setSpaceShipDirection(1);
+                    } else if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 'q') {
+                        running = false;
+                    }
+                }
+
+                arena.moveSpaceShip();
+
                 draw();
 
                 Thread.sleep(30);
             }
+
+            screen.stopScreen();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
