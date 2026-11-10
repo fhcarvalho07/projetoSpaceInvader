@@ -1,11 +1,10 @@
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
-public class Bullet {
-    private Position position;
+public class Bullet extends Element{
 
     public Bullet(int x, int y) {
-        this.position = new Position(x, y);
+        super(x,y);
     }
 
     public void move() {
@@ -16,11 +15,8 @@ public class Bullet {
         return position.getY() < 0;
     }
 
+    @Override
     public void draw(TextGraphics graphics) {
         graphics.setCharacter(position.getX(), position.getY(), TextCharacter.fromCharacter('|')[0]);
-    }
-
-    public Position getPosition() {
-        return position;
     }
 }
