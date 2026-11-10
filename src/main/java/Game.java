@@ -81,6 +81,8 @@ public class Game {
                         arena.setSpaceShipDirection(-1);
                     } else if (stroke.getKeyType() == KeyType.ArrowRight) {
                         arena.setSpaceShipDirection(1);
+                    } else if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == ' ') {
+                        arena.fireBullet();
                     } else if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 'q') {
                         running = false;
                     } else if (stroke.getKeyType() == KeyType.EOF) {
@@ -89,6 +91,7 @@ public class Game {
                 }
 
                 arena.moveSpaceShip();
+                arena.moveBullets();
 
                 draw();
 

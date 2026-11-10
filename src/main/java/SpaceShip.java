@@ -40,6 +40,10 @@ public class SpaceShip {
         position.setX(newX);
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
     public void draw(TextGraphics graphics) {
         graphics.setCharacter(position.getX(), position.getY(), TextCharacter.fromCharacter('-')[0]);
     }
