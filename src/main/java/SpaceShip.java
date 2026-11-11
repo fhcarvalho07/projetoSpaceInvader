@@ -4,7 +4,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 public class SpaceShip extends Element {
     private int d = 0;
     private int speedCounter = 0;
-    private int movementDelay = 3;
+    private int movementDelay = 4;
 
     public SpaceShip(int x, int y) {
         super(x, y);
@@ -21,7 +21,7 @@ public class SpaceShip extends Element {
 
         speedCounter++;
         if (speedCounter < movementDelay) {
-            return; // Só anda de 3 em 3 frames para ser mais lenta
+            return; // Só anda de 4 em 4 frames para ser mais lenta
         }
         speedCounter = 0;
 
