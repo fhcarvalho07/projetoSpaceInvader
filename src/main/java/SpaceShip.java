@@ -5,7 +5,7 @@ public class SpaceShip {
     private Position position;
     private int d = 0;
     private int speedCounter = 0;
-    private int movementDelay = 3;
+    private int movementDelay = 4;
 
     public SpaceShip(int x, int y) {
         this.position = new Position(x, y);
@@ -22,7 +22,7 @@ public class SpaceShip {
 
         speedCounter++;
         if (speedCounter < movementDelay) {
-            return; // Só anda de 3 em 3 frames para ser mais lenta
+            return; // Só anda de 4 em 4 frames para ser mais lenta
         }
         speedCounter = 0;
 

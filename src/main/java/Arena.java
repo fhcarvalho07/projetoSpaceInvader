@@ -12,6 +12,8 @@ public class Arena {
     private final int height;
     private SpaceShip spaceShip;
     private List<Bullet> bullets;
+    private int fireCooldown = 0;
+    private static final int COOLDOWN_FRAMES = 10;
 
 
     public Arena(int width, int height) {
@@ -23,9 +25,13 @@ public class Arena {
 
     //bullets
     public void fireBullet() {
-        int bulletX = spaceShip.getPosition().getX();
-        int bullety = spaceShip.getPosition().getY() - 1;
-        bullets.add(new Bullet(bulletX, bullety));
+        if (fireCooldown == 0) {
+            int bulletX = spaceShip.getPosition().getX();
+            int bullety = spaceShip.getPosition().getY() - 1;
+            bullets.add(new Bullet(bulletX, bullety));
+
+            fireCooldown = COOLDOWN_FRAMES;
+        }
     }
 
     //Spaceship
@@ -34,6 +40,10 @@ public class Arena {
     }
 
     public void moveBullets() {
+        if (fireCooldown > 0) {
+            fireCooldown--;
+        }
+
         for (Bullet bullet : bullets) {
             bullet.move();
         }
