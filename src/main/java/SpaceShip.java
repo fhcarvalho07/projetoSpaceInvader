@@ -14,29 +14,23 @@ public class SpaceShip extends Element {
         this.d = d;
     }
 
-    public void move(int max_width) {
+    // Avança o contador de frames; devolve true quando é altura de a nave andar (de 4 em 4 frames)
+    public boolean updateMovementCounter() {
         if (d == 0) {
-            return; // se a direcão for 0 não mexe
+            return false; // se a direcão for 0 não mexe
         }
 
         speedCounter++;
         if (speedCounter < movementDelay) {
-            return; // Só anda de 4 em 4 frames para ser mais lenta
+            return false;
         }
         speedCounter = 0;
+        return true;
+    }
 
-        int newX = position.getX() + d;
-
-
-        if (newX < 0) {
-            newX = 0;
-            d = 0;
-        } else if (newX >= max_width) {
-            newX = max_width - 1;
-            d = 0;
-        }
-
-        position.setX(newX);
+    // Posição para onde a nave quer ir; quem decide se pode é a Arena
+    public Position nextPosition() {
+        return new Position(position.getX() + d, position.getY());
     }
 
     @Override
