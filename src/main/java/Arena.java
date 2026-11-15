@@ -34,11 +34,6 @@ public class Arena {
         }
     }
 
-    //Spaceship
-    public void moveSpaceShip() {
-        spaceShip.move(width);
-    }
-
     public void moveBullets() {
         if (fireCooldown > 0) {
             fireCooldown--;
@@ -50,8 +45,30 @@ public class Arena {
         bullets.removeIf(Bullet::isOffScreen);
     }
 
+    //Spaceship
+    public void moveSpaceShip() {
+        if (!spaceShip.updateMovementCounter()) {
+            return;
+        }
+
+        Position next = spaceShip.nextPosition();
+        if (canSpaceShipMove(next)) {
+            spaceShip.setPosition(next);
+        } else {
+            spaceShip.setDirection(0); // bateu na parede, pára
+        }
+    }
+
+    private boolean canSpaceShipMove(Position position) {
+        return position.getX() >= 0 && position.getX() < width;
+    }
+
     public void setSpaceShipDirection(int d) {
         spaceShip.setDirection(d);
+    }
+
+    public SpaceShip getSpaceShip() {
+        return spaceShip;
     }
 
     //draw
