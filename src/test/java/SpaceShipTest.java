@@ -1,8 +1,8 @@
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.graphics.BasicTextImage;
+import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,18 +66,39 @@ public class SpaceShipTest {
 
     @Test
     void setPositionUpdatesPosition() {
-        ship.setPosition(new Position(3, 4));
-        assertEquals(new Position(3, 4), ship.getPosition());
+        Position position = Mockito.mock(Position.class);
+        ship.setPosition(position);
+        assertSame(position, ship.getPosition());
     }
 
     @Test
-    void drawsDashAtPosition() {
-        BasicTextImage image = new BasicTextImage(new TerminalSize(20, 20));
-        TextGraphics graphics = image.newTextGraphics();
+    void nextPositionIsBasedOnCurrentPosition() {
+        Position position = Mockito.mock(Position.class);
+        Mockito.when(position.getX()).thenReturn(3);
+        Mockito.when(position.getY()).thenReturn(4);
+        ship.setPosition(position);
+        ship.setDirection(1);
+
+        assertEquals(new Position(4, 4), ship.nextPosition());
+    }
+
+    @Test
+    void drawsSpaceShipAtPosition() {
+        TextGraphics graphics = Mockito.mock(TextGraphics.class);
 
         ship.draw(graphics);
 
-        assertEquals('-', image.getCharacterAt(10, 15).getCharacterString().charAt(0));
-        assertEquals(' ', image.getCharacterAt(11, 15).getCharacterString().charAt(0));
+        Mockito.verify(graphics).setCharacter(10, 15, TextCharacter.fromCharacter('-')[0]);
+        Mockito.verifyNoMoreInteractions(graphics);
+    }
+
+    @Test
+    void drawFollowsShipPosition() {
+        TextGraphics graphics = Mockito.mock(TextGraphics.class);
+        ship.setPosition(new Position(3, 4));
+
+        ship.draw(graphics);
+
+        Mockito.verify(graphics).setCharacter(3, 4, TextCharacter.fromCharacter('-')[0]);
     }
 }
