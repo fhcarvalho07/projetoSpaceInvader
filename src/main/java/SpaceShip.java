@@ -7,6 +7,7 @@ public class SpaceShip extends Element {
     private int movementDelay = 4;
     private static final int MAX_LIVES = 3;
     private int lives = MAX_LIVES;
+    private boolean shieldActive = false;
 
     public SpaceShip(int x, int y) {
         super(x, y);
@@ -42,6 +43,25 @@ public class SpaceShip extends Element {
         }
         speedCounter = 0;
         return true;
+    }
+
+    //powerups
+    public void addLife() {
+        lives++;
+    }
+
+    public void increaseSpeed() {
+        if (movementDelay > 1) {
+            movementDelay--;
+        }
+    }
+
+    public void activateShield() {
+        shieldActive = true;
+    }
+
+    public boolean hasShield() {
+        return shieldActive;
     }
 
     // Posição para onde a nave quer ir; quem decide se pode é a Arena

@@ -96,6 +96,7 @@ public class Game {
                 arena.moveEnemies();
                 arena.fireEnemyBullets();
                 arena.moveEnemyBullets();
+                arena.movePowerUps();
 
                 if (arena.isGameOver()) {
                     running = false;

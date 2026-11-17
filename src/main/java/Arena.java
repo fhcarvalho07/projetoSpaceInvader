@@ -15,6 +15,7 @@ public class Arena {
     private List<Bullet> bullets;
     private List<Enemy> enemies;
     private List<EnemyBullet> enemyBullets;
+    private List<PowerUp> powerUps;
     private int fireCooldown = 0;
     private static final int COOLDOWN_FRAMES = 12;
 
@@ -31,6 +32,7 @@ public class Arena {
         this.bullets = new ArrayList<>();
         this.enemies = new ArrayList<>();
         this.enemyBullets = new ArrayList<>();
+        this.powerUps = new ArrayList<>();
         createEnemies();
     }
 
@@ -65,6 +67,11 @@ public class Arena {
                 if (bullet.getPosition().equals(enemy.getPosition())) {
                     enemy.getHit();
                     bulletsToRemove.add(bullet);
+
+                    if (enemy.isDead()) {
+                        spawnPowerUp(enemy.getPosition().getX(), enemy.getPosition().getY());
+                    }
+
                     break;
                 }
             }
@@ -188,6 +195,41 @@ public class Arena {
         return spaceShip.isDead();
     }
 
+    //power-ups
+    public void movePowerUps() {
+        for (PowerUp powerUp : powerUps) {
+            powerUp.move();
+        }
+
+        powerUps.removeIf(p -> p.isOffScreen(height));
+        checkPowerUpCollisions();
+    }
+
+    private void checkPowerUpCollisions() {
+        powerUps.removeIf(powerUp -> {
+            if (powerUp.getPosition().equals(spaceShip.getPosition())) {
+                powerUp.applyEffect(spaceShip);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void spawnPowerUp(int x, int y) {
+        if (random.nextDouble() < 0.25) {
+            int type = random.nextInt(3);
+            PowerUp powerUp;
+            if (type == 0) {
+                powerUp = new AddLife(x, y);
+            } else if (type == 1) {
+                powerUp = new Shield(x, y);
+            } else {
+                powerUp = new SpeedUp(x, y);
+            }
+            powerUps.add(powerUp);
+        }
+    }
+
     // draw
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
@@ -204,6 +246,10 @@ public class Arena {
 
         for (Enemy enemy : enemies) {
             enemy.draw(graphics);
+        }
+
+        for (PowerUp powerUp : powerUps) {
+            powerUp.draw(graphics);
         }
     }
 }
