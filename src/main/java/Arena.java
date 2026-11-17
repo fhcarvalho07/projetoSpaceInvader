@@ -16,7 +16,7 @@ public class Arena {
     private List<Enemy> enemies;
     private List<EnemyBullet> enemyBullets;
     private int fireCooldown = 0;
-    private static final int COOLDOWN_FRAMES = 10;
+    private static final int COOLDOWN_FRAMES = 12;
 
     private static final int ENEMY_COUNT = 15;
     private static final int ENEMY_MIN_Y = 1;   // Enemies nascem entre y = 1 e y = 10
