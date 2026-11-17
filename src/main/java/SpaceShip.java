@@ -14,7 +14,7 @@ public class SpaceShip extends Element {
         this.d = d;
     }
 
-    // Avança o contador de frames; devolve true quando é altura de a nave andar (de 4 em 4 frames)
+    // Avança o contador de frames; devolve true quando é altura da nave andar (de 4 em 4 frames)
     public boolean updateMovementCounter() {
         if (d == 0) {
             return false; // se a direcão for 0 não mexe

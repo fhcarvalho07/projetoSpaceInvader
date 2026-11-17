@@ -12,6 +12,7 @@ public class Arena {
     private final int height;
     private SpaceShip spaceShip;
     private List<Bullet> bullets;
+    private List<Enemy> enemies;
     private int fireCooldown = 0;
     private static final int COOLDOWN_FRAMES = 10;
 
@@ -21,9 +22,11 @@ public class Arena {
         this.height = height;
         this.spaceShip = new SpaceShip(10, 30);
         this.bullets = new ArrayList<>();
+        this.enemies = new ArrayList<>();
+        this.enemies.add(new Enemy(8, 4));
     }
 
-    //bullets
+    // Bullet
     public void fireBullet() {
         if (fireCooldown == 0) {
             int bulletX = spaceShip.getPosition().getX();
@@ -45,7 +48,7 @@ public class Arena {
         bullets.removeIf(Bullet::isOffScreen);
     }
 
-    //Spaceship
+    // SpaceShip
     public void moveSpaceShip() {
         if (!spaceShip.updateMovementCounter()) {
             return;
@@ -71,7 +74,12 @@ public class Arena {
         return spaceShip;
     }
 
-    //draw
+    // Enemy
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    // draw
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
@@ -79,6 +87,10 @@ public class Arena {
 
         for (Bullet bullet : bullets) {
             bullet.draw(graphics);
+        }
+
+        for (Enemy enemy : enemies) {
+            enemy.draw(graphics);
         }
     }
 }
