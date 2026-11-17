@@ -75,6 +75,25 @@ public class Arena {
     }
 
     // Enemy
+    public void moveEnemies() {
+        for (Enemy enemy : enemies) {
+            if (!enemy.updateMovementCounter()) {
+                continue;
+            }
+
+            List<Position> validPositions = enemy.possiblePositions();
+            validPositions.removeIf(p -> !isInside(p));
+
+            if (!validPositions.isEmpty()) {
+                enemy.setPosition(enemy.chooseNextPosition(validPositions));
+            }
+        }
+    }
+
+    private boolean isInside(Position position) {
+        return position.getX() >= 0 && position.getX() < width && position.getY() < height;
+    }
+
     public List<Enemy> getEnemies() {
         return enemies;
     }
