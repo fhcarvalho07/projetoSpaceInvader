@@ -5,9 +5,25 @@ public class SpaceShip extends Element {
     private int d = 0;
     private int speedCounter = 0;
     private int movementDelay = 4;
+    private static final int MAX_LIVES = 3;
+    private int lives = MAX_LIVES;
 
     public SpaceShip(int x, int y) {
         super(x, y);
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void getHit() {
+        if (lives > 0) {
+            lives--;
+        }
+    }
+
+    public boolean isDead() {
+        return lives <= 0;
     }
 
     public void setDirection(int d) {
