@@ -9,9 +9,25 @@ public class Enemy extends Element {
     private int speedCounter = 0;
     private int movementDelay = 8 * 4;
     private final Random random = new Random();
+    private static final int MAX_HEALTH = 3;
+    private int health = MAX_HEALTH;
 
     public Enemy(int x, int y) {
         super(x, y);
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void getHit() {
+        if (health > 0) {
+            health--;
+        }
+    }
+
+    public boolean isDead() {
+        return health <= 0;
     }
 
     // Avança o contador de frames; devolve true quando é altura do inimigo andar (de 32 em 32 frames)

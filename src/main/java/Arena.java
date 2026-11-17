@@ -52,6 +52,27 @@ public class Arena {
             bullet.move();
         }
         bullets.removeIf(Bullet::isOffScreen);
+        checkBulletCollisions();
+    }
+
+    // Se uma bala está na mesma posição que um inimigo, o inimigo leva hit e a bala desaparece
+    private void checkBulletCollisions() {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
+        for (Bullet bullet : bullets) {
+            for (Enemy enemy : enemies) {
+                if (bullet.getPosition().equals(enemy.getPosition())) {
+                    enemy.getHit();
+                    bulletsToRemove.add(bullet);
+                    break;
+                }
+            }
+        }
+        bullets.removeAll(bulletsToRemove);
+        enemies.removeIf(Enemy::isDead);
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
     }
 
     // SpaceShip
@@ -106,6 +127,7 @@ public class Arena {
                 enemy.setPosition(enemy.chooseNextPosition(validPositions));
             }
         }
+        checkBulletCollisions();
     }
 
     // Verifica se já existe um inimigo nessa posição
