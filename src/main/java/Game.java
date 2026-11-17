@@ -92,6 +92,7 @@ public class Game {
 
                 arena.moveSpaceShip();
                 arena.moveBullets();
+                arena.moveEnemies();
 
                 draw();
 

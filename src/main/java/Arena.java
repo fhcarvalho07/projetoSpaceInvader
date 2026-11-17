@@ -5,6 +5,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Arena {
@@ -12,8 +13,14 @@ public class Arena {
     private final int height;
     private SpaceShip spaceShip;
     private List<Bullet> bullets;
+    private List<Enemy> enemies;
     private int fireCooldown = 0;
     private static final int COOLDOWN_FRAMES = 10;
+
+    private static final int ENEMY_COUNT = 15;
+    private static final int ENEMY_MIN_Y = 1;       // Enemies nascem entre y = 1 e y = 6
+    private static final int ENEMY_MAX_Y = 10;
+    private final Random random = new Random();
 
 
     public Arena(int width, int height) {
@@ -21,9 +28,11 @@ public class Arena {
         this.height = height;
         this.spaceShip = new SpaceShip(10, 30);
         this.bullets = new ArrayList<>();
+        this.enemies = new ArrayList<>();
+        createEnemies();
     }
 
-    //bullets
+    // Bullet
     public void fireBullet() {
         if (fireCooldown == 0) {
             int bulletX = spaceShip.getPosition().getX();
@@ -43,9 +52,30 @@ public class Arena {
             bullet.move();
         }
         bullets.removeIf(Bullet::isOffScreen);
+        checkBulletCollisions();
     }
 
-    //Spaceship
+    // Se uma bala está na mesma posição que um inimigo, o inimigo leva hit e a bala desaparece
+    private void checkBulletCollisions() {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
+        for (Bullet bullet : bullets) {
+            for (Enemy enemy : enemies) {
+                if (bullet.getPosition().equals(enemy.getPosition())) {
+                    enemy.getHit();
+                    bulletsToRemove.add(bullet);
+                    break;
+                }
+            }
+        }
+        bullets.removeAll(bulletsToRemove);
+        enemies.removeIf(Enemy::isDead);
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
+
+    // SpaceShip
     public void moveSpaceShip() {
         if (!spaceShip.updateMovementCounter()) {
             return;
@@ -71,7 +101,54 @@ public class Arena {
         return spaceShip;
     }
 
-    //draw
+    // Enemy
+    private void createEnemies() {
+        while (enemies.size() < ENEMY_COUNT) {
+            int x = random.nextInt(width);
+            int y = ENEMY_MIN_Y + random.nextInt(ENEMY_MAX_Y - ENEMY_MIN_Y + 1);
+            Position position = new Position(x, y);
+            if (!isOccupied(position)) {
+                enemies.add(new Enemy(x, y));
+            }
+        }
+    }
+
+    // Cada inimigo escolhe a sua direção (random)
+    public void moveEnemies() {
+        for (Enemy enemy : enemies) {
+            if (!enemy.updateMovementCounter()) {
+                continue;
+            }
+
+            List<Position> validPositions = enemy.possiblePositions();
+            validPositions.removeIf(p -> !isInside(p) || isOccupied(p));
+
+            if (!validPositions.isEmpty()) {
+                enemy.setPosition(enemy.chooseNextPosition(validPositions));
+            }
+        }
+        checkBulletCollisions();
+    }
+
+    // Verifica se já existe um inimigo nessa posição
+    private boolean isOccupied(Position position) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getPosition().equals(position)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isInside(Position position) {
+        return position.getX() >= 0 && position.getX() < width && position.getY() < height;
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    // draw
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
@@ -79,6 +156,10 @@ public class Arena {
 
         for (Bullet bullet : bullets) {
             bullet.draw(graphics);
+        }
+
+        for (Enemy enemy : enemies) {
+            enemy.draw(graphics);
         }
     }
 }
