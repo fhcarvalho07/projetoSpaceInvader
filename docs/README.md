@@ -37,47 +37,7 @@ To ensure high maintainability, modularity, and testability, the project follows
 - **Domain Support & Geometry (`Position`):** 
   - `Position` provides a dedicated abstraction for 2D grid coordinates `(x, y)` on the terminal screen. Centralizing coordinate logic and equality checks in a single value-like object avoids code duplication and simplifies collision and movement calculations across all game entities.
 
-```mermaid
-classDiagram
-    class Application {
-        +main(String[] args)
-    }
 
-    class Game {
-        +start()
-        +run()
-    }
+<img width="782" height="487" alt="architecture" src="https://github.com/user-attachments/assets/b5454fbe-c4e0-48db-b193-e53eb051ca74" />
 
-    class Arena {
-        -width: int
-        -height: int
-        +step()
-        +verifyCollisions()
-    }
 
-    class SpaceShip {
-        -health: int
-        +moveLeft()
-        +moveRight()
-        +shoot()
-    }
-
-    class Bullet {
-        +moveUp()
-        +moveDown()
-    }
-
-    class Position {
-        -x: int
-        -y: int
-        +getX()
-        +getY()
-    }
-
-    Application --> Game : initializes
-    Game --> Arena : runs
-    Arena --> SpaceShip : contains
-    Arena --> Bullet : contains
-    SpaceShip --> Position : has
-    Bullet --> Position : has
-    ```
