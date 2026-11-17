@@ -35,6 +35,12 @@ public class EnemyTest {
     }
 
     @Test
+    void firesBulletJustBelow() {
+        EnemyBullet bullet = enemy.fire();
+        assertEquals(new Position(5, 6), bullet.getPosition());
+    }
+
+    @Test
     void healthNeverGoesNegative() {
         for (int i = 0; i < 5; i++) {
             enemy.getHit();

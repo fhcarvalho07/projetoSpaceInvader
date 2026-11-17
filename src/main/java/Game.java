@@ -95,6 +95,12 @@ public class Game {
                 arena.moveSpaceShip();
                 arena.moveBullets();
                 arena.moveEnemies();
+                arena.fireEnemyBullets();
+                arena.moveEnemyBullets();
+
+                if (arena.isGameOver()) {
+                    running = false;
+                }
 
                 draw();
 

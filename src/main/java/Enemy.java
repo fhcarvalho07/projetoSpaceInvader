@@ -11,6 +11,7 @@ public class Enemy extends Element {
     private final Random random = new Random();
     private static final int MAX_HEALTH = 3;
     private int health = MAX_HEALTH;
+    private static final int FIRE_CHANCE = 300;
 
     public Enemy(int x, int y) {
         super(x, y);
@@ -38,6 +39,15 @@ public class Enemy extends Element {
         }
         speedCounter = 0;
         return true;
+    }
+
+    // Decide se o inimigo dispara neste frame (randomly)
+    public boolean wantsToFire() {
+        return random.nextInt(FIRE_CHANCE) == 0;
+    }
+
+    public EnemyBullet fire() {
+        return new EnemyBullet(position.getX(), position.getY() + 1);
     }
 
     // Posições para onde o inimigo pode ir; quem decide se pode é a Arena

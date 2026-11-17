@@ -209,6 +209,48 @@ public class ArenaTest {
         verifyBulletsDrawn(0);
     }
 
+    // Enemy Bullets
+
+    private void moveEnemyBulletsFrames(int frames) {
+        for (int i = 0; i < frames; i++) arena.moveEnemyBullets();
+    }
+
+    @Test
+    void enemyBulletMovesDownEveryTwoFrames() {
+        EnemyBullet bullet = new EnemyBullet(3, 20);
+        arena.getEnemyBullets().add(bullet);
+
+        moveEnemyBulletsFrames(4);
+        assertEquals(new Position(3, 22), bullet.getPosition());
+    }
+
+    @Test
+    void enemyBulletIsRemovedWhenOffScreen() {
+        arena.getEnemyBullets().add(new EnemyBullet(3, height - 1));
+
+        moveEnemyBulletsFrames(2);
+        assertTrue(arena.getEnemyBullets().isEmpty());
+    }
+
+    @Test
+    void enemyBulletHitsShip() {
+        arena.getEnemyBullets().add(new EnemyBullet(10, 29));
+
+        moveEnemyBulletsFrames(2);
+        assertEquals(2, arena.getSpaceShip().getLives());
+        assertTrue(arena.getEnemyBullets().isEmpty());
+    }
+
+    @Test
+    void gameOverAfterThreeHits() {
+        for (int i = 0; i < 3; i++) {
+            assertFalse(arena.isGameOver());
+            arena.getEnemyBullets().add(new EnemyBullet(10, 29));
+            moveEnemyBulletsFrames(2);
+        }
+        assertTrue(arena.isGameOver());
+    }
+
     // Draw
 
     @Test

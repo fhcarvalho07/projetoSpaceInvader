@@ -14,11 +14,12 @@ public class Arena {
     private SpaceShip spaceShip;
     private List<Bullet> bullets;
     private List<Enemy> enemies;
+    private List<EnemyBullet> enemyBullets;
     private int fireCooldown = 0;
     private static final int COOLDOWN_FRAMES = 10;
 
     private static final int ENEMY_COUNT = 15;
-    private static final int ENEMY_MIN_Y = 1;       // Enemies nascem entre y = 1 e y = 6
+    private static final int ENEMY_MIN_Y = 1;   // Enemies nascem entre y = 1 e y = 10
     private static final int ENEMY_MAX_Y = 10;
     private final Random random = new Random();
 
@@ -29,6 +30,7 @@ public class Arena {
         this.spaceShip = new SpaceShip(10, 30);
         this.bullets = new ArrayList<>();
         this.enemies = new ArrayList<>();
+        this.enemyBullets = new ArrayList<>();
         createEnemies();
     }
 
@@ -148,6 +150,44 @@ public class Arena {
         return enemies;
     }
 
+    // Enemy Bullets
+    public void fireEnemyBullets() {
+        for (Enemy enemy : enemies) {
+            if (enemy.wantsToFire()) {
+                enemyBullets.add(enemy.fire());
+            }
+        }
+    }
+
+    public void moveEnemyBullets() {
+        for (EnemyBullet bullet : enemyBullets) {
+            if (bullet.updateMovementCounter()) {
+                bullet.move();
+            }
+        }
+        enemyBullets.removeIf(b -> b.isOffScreen(height));
+        checkEnemyBulletCollisions();
+    }
+
+    // Se uma bala inimiga está na mesma posição que a nave, a nave leva hit e a bala desaparece
+    private void checkEnemyBulletCollisions() {
+        enemyBullets.removeIf(bullet -> {
+            if (bullet.getPosition().equals(spaceShip.getPosition())) {
+                spaceShip.getHit();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public List<EnemyBullet> getEnemyBullets() {
+        return enemyBullets;
+    }
+
+    public boolean isGameOver() {
+        return spaceShip.isDead();
+    }
+
     // draw
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
@@ -155,6 +195,10 @@ public class Arena {
         spaceShip.draw(graphics);
 
         for (Bullet bullet : bullets) {
+            bullet.draw(graphics);
+        }
+
+        for (EnemyBullet bullet : enemyBullets) {
             bullet.draw(graphics);
         }
 
