@@ -5,6 +5,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Arena {
@@ -16,6 +17,11 @@ public class Arena {
     private int fireCooldown = 0;
     private static final int COOLDOWN_FRAMES = 10;
 
+    private static final int ENEMY_COUNT = 15;
+    private static final int ENEMY_MIN_Y = 1;       // Enemies nascem entre y = 1 e y = 6
+    private static final int ENEMY_MAX_Y = 10;
+    private final Random random = new Random();
+
 
     public Arena(int width, int height) {
         this.width = width;
@@ -23,7 +29,7 @@ public class Arena {
         this.spaceShip = new SpaceShip(10, 30);
         this.bullets = new ArrayList<>();
         this.enemies = new ArrayList<>();
-        this.enemies.add(new Enemy(8, 4));
+        createEnemies();
     }
 
     // Bullet
@@ -75,6 +81,18 @@ public class Arena {
     }
 
     // Enemy
+    private void createEnemies() {
+        while (enemies.size() < ENEMY_COUNT) {
+            int x = random.nextInt(width);
+            int y = ENEMY_MIN_Y + random.nextInt(ENEMY_MAX_Y - ENEMY_MIN_Y + 1);
+            Position position = new Position(x, y);
+            if (!isOccupied(position)) {
+                enemies.add(new Enemy(x, y));
+            }
+        }
+    }
+
+    // Cada inimigo escolhe a sua direção (random)
     public void moveEnemies() {
         for (Enemy enemy : enemies) {
             if (!enemy.updateMovementCounter()) {
@@ -82,12 +100,22 @@ public class Arena {
             }
 
             List<Position> validPositions = enemy.possiblePositions();
-            validPositions.removeIf(p -> !isInside(p));
+            validPositions.removeIf(p -> !isInside(p) || isOccupied(p));
 
             if (!validPositions.isEmpty()) {
                 enemy.setPosition(enemy.chooseNextPosition(validPositions));
             }
         }
+    }
+
+    // Verifica se já existe um inimigo nessa posição
+    private boolean isOccupied(Position position) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getPosition().equals(position)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isInside(Position position) {
