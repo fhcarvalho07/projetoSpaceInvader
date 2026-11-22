@@ -1,4 +1,3 @@
-
 # Space Invader
 
 ## Game Description
@@ -104,7 +103,7 @@ To solve recurring architectural challenges cleanly and avoid tight coupling bet
 
 - Split the code into **Model-View-Controller** packages to decouple model logic from Lanterna and test game rules without a terminal.
 - Hide Lanterna behind a `GUI` interface (**Facade**) that can be mocked in tests.
-- Introduce the **State** pattern for game screens (menu, gameplay, game over), wave progression, and shield consumption on hit (`hasShield()`).
+- Introduce the **State** pattern for game screens (menu, gameplay, game over), wave progression, and shield consumption/damage absorption when taking a hit (`hasShield()`).
 - Extract power-up creation into a **Factory Method** and inject `Random` instances for deterministic testing.
 
 ---
@@ -125,14 +124,15 @@ The project includes 56 unit tests using **JUnit Jupiter** and **Mockito** acros
 
 ### Screenshot of coverage report
 
-<p align="center">
-  <img src="images/screenshots/coverage.png" width="700"/>
-</p>
-<p align="center"><b><i>Fig 9. Code coverage report</i></b></p>
+<img width="2902" height="390" alt="JaCoCo Coverage Report" src="https://github.com/user-attachments/assets/f08ff064-e3fb-47be-b0c8-2b1f9625d8e5" />
+
 
 ### Link to mutation testing report
 
-[Mutation tests](reports/pitest/index.html)
+[Mutation Testing Report](./reports/pitest/index.html)
+
+<img width="1420" height="612" alt="Pitest Mutation Coverage Report" src="https://github.com/user-attachments/assets/04e76cf7-46c3-43b8-9df2-56a82b92144c" />
+
 
 ---
 
@@ -141,3 +141,4 @@ The project includes 56 unit tests using **JUnit Jupiter** and **Mockito** acros
 - Rodrigo Faria: 33.3%
 - Francisca Vieira: 33.3%
 - Francisco Carvalho: 33.3%
+
